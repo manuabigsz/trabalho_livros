@@ -4,16 +4,10 @@ import java.util.concurrent.Semaphore;
 
 public class Livros extends Thread{
     String nomeLivro = "O Iluminado";
-    int id;
 
     boolean livro_disponível = true;
 
-    public Livros(int id) {
-        this.id = id;
-        
-    }
-
-    public synchronized void emprestar() {
+    public synchronized void emprestar(int idUsuario) {
 
         try {
           
@@ -21,10 +15,10 @@ public class Livros extends Thread{
                 wait();
             }
             livro_disponível = false;
-            System.out.println("O usuario com id " + this.id + " esta lendo o livro '" + nomeLivro + "'");
+            System.out.println("O usuario com id " + idUsuario + " esta lendo o livro '" + nomeLivro + "'");
 
             Thread.sleep(3000);
-            System.out.println("O usuario com id " + this.id + " parou de ler o livro '" + nomeLivro + "'");
+            System.out.println("O usuario com id " + idUsuario + " parou de ler o livro '" + nomeLivro + "'");
 
             livro_disponível = true;
 

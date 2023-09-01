@@ -8,7 +8,7 @@ package LivrosSynchronized;
  *
  * @author 20212PF.CC0010
  */
-public class Usuario {
+public class Usuario extends Thread{
        int id;
        Livros livro;
        
@@ -18,7 +18,7 @@ public class Usuario {
        }
        
        public void run(){
-           livro.emprestar();
+           livro.emprestar(id);
        }
        
 }

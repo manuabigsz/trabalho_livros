@@ -2,32 +2,41 @@ package LivrosSemaforo;
 
 import java.util.concurrent.Semaphore;
 
-public class Livros {
+public class Livros extends Thread {
 
-   String nomeLivro = "O Iluminado";
-    boolean livro_disponivel = true;
+    String nomeLivro = "O Iluminado";
+    int id;
+    Semaphore semaforo;
+    boolean livro_disponível = true;
 
-    public void emprestar(int id, Semaphore semaforo) {
+    public Livros(int id, Semaphore semaforo) {
+        this.id = id;
+        this.semaforo = semaforo;
+    }
+
+    public synchronized void run() {
+
         try {
-            semaforo.acquire(); // Adquire o semáforo (permite apenas um usuário por vez)
+            this.semaforo.acquire();
 
-            while (!livro_disponivel) {
-                Thread.sleep(100); // Aguarda um curto período para tentar novamente
+            while (!livro_disponível) {
+                wait();
             }
-
-            livro_disponivel = false;
-            System.out.println("O usuário com id " + id + " está lendo o livro '" + nomeLivro + "'");
+            livro_disponível = false;
+            System.out.println("O usuario com id " + this.id + " esta lendo o livro '" + nomeLivro + "'");
 
             Thread.sleep(3000);
-            System.out.println("O usuário com id " + id + " parou de ler o livro '" + nomeLivro + "'");
+            System.out.println("O usuario com id " + this.id + " parou de ler o livro '" + nomeLivro + "'");
 
-            livro_disponivel = true;
-            semaforo.release(); // Libera o semáforo
+            livro_disponível = true;
 
-            System.out.println("O livro '" + nomeLivro + "' está disponível para o próximo usuário.\n");
+            System.out.println("O livro '" + nomeLivro + "' esta disponivel para o proximo usuario.\n");
 
+            notify();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            this.semaforo.release();
         }
     }
 

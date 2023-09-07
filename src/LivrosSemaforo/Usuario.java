@@ -1,5 +1,8 @@
 package LivrosSemaforo;
 
+public class Usuario {
+    
+}
 import java.util.concurrent.Semaphore;
 
 class Usuario extends Thread {
